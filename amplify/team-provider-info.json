@@ -14,6 +14,12 @@
         "categories": {
             "auth": {
                 "recipes1abf8c01": {}
+            },
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "d346q61ebojsb1",
+                    "type": "cicd"
+                }
             }
         }
     }
