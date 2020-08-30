@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Amplify, { API, graphqlOperation } from "aws-amplify";
 import { createRecipe } from "./graphql/mutations";
 import { listRecipes } from "./graphql/queries";
-import { withAuthenticator } from "@aws-amplify/ui-react";
+import { withAuthenticator, AmplifySignOut } from "@aws-amplify/ui-react";
 
 import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
@@ -46,23 +46,24 @@ const App = () => {
     }
   }
 
-  function InstrInput(props){
-    let list_idx = props.idx+1;
+  function InstrInput(props) {
+    let list_idx = props.idx + 1;
     return (
-        <input
-          placeholder={"Step " + list_idx}
-          value={formState.instructions[props.idx]}
-          onChange={(event) => {
-            let instrs_copy = formState.instructions;
-            instrs_copy[props.idx] = event.target.value;
-            setInput("instructions", instrs_copy)
-          }}
-        />
+      <input
+        placeholder={"Step " + list_idx}
+        value={formState.instructions[props.idx]}
+        onChange={(event) => {
+          let instrs_copy = formState.instructions;
+          instrs_copy[props.idx] = event.target.value;
+          setInput("instructions", instrs_copy);
+        }}
+      />
     );
   }
 
   return (
     <div style={styles.container}>
+      <AmplifySignOut />
       <h2>Recipes</h2>
       <input
         onChange={(event) => setInput("name", event.target.value)}
@@ -72,13 +73,16 @@ const App = () => {
       />
       <button
         onClick={() => {
-          setInputs([...inputs,
-            <InstrInput key={numInstrs} idx={numInstrs}/>
+          setInputs([
+            ...inputs,
+            <InstrInput key={numInstrs} idx={numInstrs} />,
           ]);
-          console.log(numInstrs)
+          console.log(numInstrs);
           setNumInstrs(numInstrs + 1);
         }}
-      >Add some steps</button>
+      >
+        Add some steps
+      </button>
       {inputs}
       <hr></hr>
       <button style={styles.button} onClick={addRecipe}>
@@ -90,7 +94,7 @@ const App = () => {
           {recipe.instructions ? (
             recipe.instructions.map((instruction, index) => (
               <p key={index} style={styles.todoDescription}>
-                {index+1}. {instruction}
+                {index + 1}. {instruction}
               </p>
             ))
           ) : (
