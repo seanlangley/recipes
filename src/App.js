@@ -56,7 +56,6 @@ const App = () => {
             let instrs_copy = formState.instructions;
             instrs_copy[props.idx] = event.target.value;
             setInput("instructions", instrs_copy)
-            console.log(formState.instructions);
           }}
         />
     );
