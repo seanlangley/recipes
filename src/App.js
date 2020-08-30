@@ -8,7 +8,7 @@ import { withAuthenticator } from '@aws-amplify/ui-react'
 import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
 
-const initialState = { name: '', description: '' }
+const initialState = { name: '', instructions: '' }
 
 const App = () => {
   const [formState, setFormState] = useState(initialState)
@@ -32,8 +32,9 @@ const App = () => {
 
   async function addRecipe() {
     try {
-      if (!formState.name || !formState.description) return
-      const recipe = { ...formState }
+      if (!formState.name || !formState.instructions) return
+      let recipe = { ...formState }
+      recipe.instructions = recipe.instructions.split('\n')
       setRecipes([...recipes, recipe])
       setFormState(initialState)
       await API.graphql(graphqlOperation(createRecipe, {input: recipe}))
@@ -51,18 +52,23 @@ const App = () => {
         value={formState.name} 
         placeholder="Name"
       />
-      <input
-        onChange={event => setInput('description', event.target.value)}
+      <textarea
+        onChange={event => setInput('instructions', event.target.value)}
         style={styles.input}
-        value={formState.description}
-        placeholder="Description"
+        value={formState.instructions}
+        placeholder="Instructions"
       />
       <button style={styles.button} onClick={addRecipe}>Create recipe</button>
       {
         recipes.map((recipe, index) => (
           <div key={recipe.id ? recipe.id : index} style={styles.recipe}>
             <p style={styles.todoName}>{recipe.name}</p>
-            <p style={styles.todoDescription}>{recipe.description}</p>
+            { recipe.instructions ? 
+                recipe.instructions.map((instruction, index) => (
+                    <p key={index} style={styles.todoDescription}>{instruction}</p>
+                ))
+                : <p>No Instructions</p>
+            }
           </div>
         ))
       }

@@ -6,7 +6,6 @@ export const getRecipe = /* GraphQL */ `
     getRecipe(id: $id) {
       id
       name
-      description
       instructions
       ingredients
       createdAt
@@ -24,7 +23,6 @@ export const listRecipes = /* GraphQL */ `
       items {
         id
         name
-        description
         instructions
         ingredients
         createdAt

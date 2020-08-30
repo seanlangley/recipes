@@ -6,7 +6,6 @@ export const onCreateRecipe = /* GraphQL */ `
     onCreateRecipe {
       id
       name
-      description
       instructions
       ingredients
       createdAt
@@ -19,7 +18,6 @@ export const onUpdateRecipe = /* GraphQL */ `
     onUpdateRecipe {
       id
       name
-      description
       instructions
       ingredients
       createdAt
@@ -32,7 +30,6 @@ export const onDeleteRecipe = /* GraphQL */ `
     onDeleteRecipe {
       id
       name
-      description
       instructions
       ingredients
       createdAt

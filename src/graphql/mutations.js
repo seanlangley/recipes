@@ -9,7 +9,6 @@ export const createRecipe = /* GraphQL */ `
     createRecipe(input: $input, condition: $condition) {
       id
       name
-      description
       instructions
       ingredients
       createdAt
@@ -25,7 +24,6 @@ export const updateRecipe = /* GraphQL */ `
     updateRecipe(input: $input, condition: $condition) {
       id
       name
-      description
       instructions
       ingredients
       createdAt
@@ -41,7 +39,6 @@ export const deleteRecipe = /* GraphQL */ `
     deleteRecipe(input: $input, condition: $condition) {
       id
       name
-      description
       instructions
       ingredients
       createdAt
