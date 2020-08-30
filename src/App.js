@@ -8,13 +8,12 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
 
-const initialState = { name: "", instructions: "" };
+const initialState = { name: "", instructions: [] };
 
 const App = () => {
   const [formState, setFormState] = useState(initialState);
   const [recipes, setRecipes] = useState([]);
   const [numInstrs, setNumInstrs] = useState(0);
-  const [instrs, setInstrs] = useState([]);
   const [inputs, setInputs] = useState([]);
 
   useEffect(() => {
@@ -39,7 +38,6 @@ const App = () => {
     try {
       if (!formState.name || !formState.instructions) return;
       let recipe = { ...formState };
-      recipe.instructions = recipe.instructions.split("\n");
       setRecipes([...recipes, recipe]);
       setFormState(initialState);
       await API.graphql(graphqlOperation(createRecipe, { input: recipe }));
@@ -49,15 +47,16 @@ const App = () => {
   }
 
   function InstrInput(props){
+    let list_idx = props.idx+1;
     return (
         <input
-          placeholder={"Step " + props.idx}
-          value={instrs[props.idx]}
+          placeholder={"Step " + list_idx}
+          value={formState.instructions[props.idx]}
           onChange={(event) => {
-            let instrs_copy = instrs;
+            let instrs_copy = formState.instructions;
             instrs_copy[props.idx] = event.target.value;
-            setInstrs(instrs_copy);
-            console.log(instrs);
+            setInput("instructions", instrs_copy)
+            console.log(formState.instructions);
           }}
         />
     );
@@ -66,6 +65,12 @@ const App = () => {
   return (
     <div style={styles.container}>
       <h2>Recipes</h2>
+      <input
+        onChange={(event) => setInput("name", event.target.value)}
+        style={styles.input}
+        value={formState.name}
+        placeholder="Name"
+      />
       <button
         onClick={() => {
           setInputs([...inputs,
@@ -74,22 +79,9 @@ const App = () => {
           console.log(numInstrs)
           setNumInstrs(numInstrs + 1);
         }}
-      >
-        test
-      </button>
+      >Add some steps</button>
       {inputs}
-      <input
-        onChange={(event) => setInput("name", event.target.value)}
-        style={styles.input}
-        value={formState.name}
-        placeholder="Name"
-      />
-      <textarea
-        onChange={(event) => setInput("instructions", event.target.value)}
-        style={styles.input}
-        value={formState.instructions}
-        placeholder="Instructions"
-      />
+      <hr></hr>
       <button style={styles.button} onClick={addRecipe}>
         Create recipe
       </button>
@@ -99,7 +91,7 @@ const App = () => {
           {recipe.instructions ? (
             recipe.instructions.map((instruction, index) => (
               <p key={index} style={styles.todoDescription}>
-                {instruction}
+                {index+1}. {instruction}
               </p>
             ))
           ) : (
