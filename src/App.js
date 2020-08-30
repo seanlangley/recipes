@@ -13,6 +13,7 @@ const initialState = { name: '', instructions: '' }
 const App = () => {
   const [formState, setFormState] = useState(initialState)
   const [recipes, setRecipes] = useState([])
+  const [numInstrs, setNumInstrs] = useState(3);
 
   useEffect(() => {
     fetchRecipes()
@@ -43,9 +44,19 @@ const App = () => {
     }
   }
 
+  function InstructionList(props) {
+    let instrs = [];
+    for (let i = 0; i < props.num_items; i++) {
+      instrs.push(<input key={i} placeholder={"Step " + i} />);
+    }
+    return instrs;
+  }
+
   return (
     <div style={styles.container}>
       <h2>Recipes</h2>
+      <button onClick={() => {console.log("hi"); setNumInstrs(numInstrs+1);}}>test</button>
+      <InstructionList num_items={numInstrs}/>
       <input
         onChange={event => setInput('name', event.target.value)}
         style={styles.input}
